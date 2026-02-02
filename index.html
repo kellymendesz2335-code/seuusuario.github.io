@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Zona de Treinamento – XOSS X2 Pro</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Fonte racing / tech -->
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --preto: #0b0b0b;
+      --cinza: #141414;
+      --cinza-claro: #1f1f1f;
+      --laranja: #ff6f00;
+      --vermelho: #c8102e;
+      --branco: #ffffff;
+      --texto: #dcdcdc;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Montserrat', sans-serif;
+      background: radial-gradient(circle at top, #1a1a1a, #000);
+      color: var(--texto);
+      margin: 0;
+      padding: 0;
+    }
+
+    header {
+      padding: 40px 20px;
+      text-align: center;
+      border-bottom: 2px solid var(--laranja);
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 42px;
+      font-weight: 800;
+      letter-spacing: 2px;
+      color: var(--laranja);
+      text-transform: uppercase;
+    }
+
+    header p {
+      margin-top: 10px;
+      color: #aaa;
+      font-weight: 500;
+    }
+
+    main {
+      max-width: 900px;
+      margin: 50px auto;
+      padding: 0 20px;
+    }
+
+    section {
+      background: linear-gradient(180deg, var(--cinza), var(--preto));
+      border-radius: 16px;
+      padding: 35px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+      border: 1px solid #222;
+    }
+
+    h2 {
+      margin-top: 0;
+      font-size: 26px;
+      color: var(--branco);
+      border-left: 6px solid var(--laranja);
+      padding-left: 14px;
+      text-transform: uppercase;
+    }
+
+    .form-group {
+      margin-top: 20px;
+    }
+
+    label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 6px;
+      color: #bbb;
+    }
+
+    input {
+      width: 100%;
+      padding: 14px;
+      border-radius: 10px;
+      border: 1px solid #333;
+      background: var(--cinza-claro);
+      color: var(--branco);
+      font-size: 15px;
+    }
+
+    input:focus {
+      outline: none;
+      border-color: var(--laranja);
+      box-shadow: 0 0 0 2px rgba(255,111,0,0.2);
+    }
+
+    .buttons {
+      display: flex;
+      gap: 15px;
+      margin-top: 30px;
+      flex-wrap: wrap;
+    }
+
+    button {
+      flex: 1;
+      padding: 14px;
+      border-radius: 12px;
+      border: none;
+      font-weight: 700;
+      font-size: 14px;
+      letter-spacing: 1px;
+      cursor: pointer;
+      transition: 0.3s ease;
+      text-transform: uppercase;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--laranja), #ff8c1a);
+      color: #000;
+    }
+
+    .btn-secondary {
+      background: linear-gradient(135deg, var(--vermelho), #ff2a4d);
+      color: #fff;
+    }
+
+    button:hover {
+      transform: translateY(-3px);
+      filter: brightness(1.1);
+    }
+
+    #fctOutput {
+      margin-top: 30px;
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+    }
+
+    th, td {
+      padding: 14px;
+      text-align: center;
+      font-size: 14px;
+    }
+
+    th {
+      background: var(--laranja);
+      color: #000;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    tr:nth-child(even) {
+      background: #1b1b1b;
+    }
+
+    tr:nth-child(odd) {
+      background: #111;
+    }
+
+    #zonaAtual {
+      margin-top: 35px;
+      padding: 25px;
+      border-radius: 14px;
+      font-size: 20px;
+      font-weight: 800;
+      text-align: center;
+      background: #222;
+      color: #fff;
+      box-shadow: inset 0 0 0 2px #333;
+      transition: 0.4s ease;
+    }
+
+    footer {
+      text-align: center;
+      padding: 30px;
+      color: #666;
+      font-size: 12px;
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <h1>Zona de Treinamento</h1>
+  <p>Monitoramento de performance cardíaca • Estilo Racing</p>
+</header>
+
+<main>
+  <section>
+    <h2>Cálculo das Zonas</h2>
+
+    <div class="form-group">
+      <label for="fcRepouso">Frequência Cardíaca de Repouso (bpm)</label>
+      <input type="number" id="fcRepouso" placeholder="Ex: 55">
+    </div>
+
+    <div class="form-group">
+      <label for="fcMaxima">Frequência Cardíaca Máxima (bpm)</label>
+      <input type="number" id="fcMaxima" placeholder="Ex: 203">
+    </div>
+
+    <div class="buttons">
+      <button class="btn-primary" onclick="calcularZonas()">Calcular Zonas</button>
+      <button class="btn-secondary" onclick="conectarCinta()">Conectar Cinta</button>
+    </div>
+
+    <div id="fctOutput"></div>
+    <div id="zonaAtual">Zona atual: --</div>
+  </section>
+</main>
+
+<footer>
+  XOSS X2 Pro • Training Performance Interface
+</footer>
+
+<script>
+  let zonas = [];
+  const zonaElement = document.getElementById("zonaAtual");
+
+  function calcularZonas() {
+    const fcRep = parseFloat(document.getElementById('fcRepouso').value);
+    const fcMax = parseFloat(document.getElementById('fcMaxima').value);
+    const output = document.getElementById('fctOutput');
+
+    if (isNaN(fcRep) || isNaN(fcMax) || fcMax <= fcRep) {
+      output.innerHTML = "⚠️ Verifique os valores informados.";
+      return;
+    }
+
+    zonas = [
+      { zona: 1, pct: 0.50, nome: "Aquecimento / Recuperação" },
+      { zona: 2, pct: 0.60, nome: "Base aeróbica leve" },
+      { zona: 3, pct: 0.70, nome: "Resistência aeróbica moderada" },
+      { zona: 4, pct: 0.80, nome: "Limiar anaeróbico" },
+      { zona: 5, pct: 0.90, nome: "Esforço máximo" },
+      { zona: 6, pct: 0.95, nome: "Pico de desempenho" }
+    ];
+
+    let html = `
+      <table>
+        <tr>
+          <th>Zona</th>
+          <th>Intensidade</th>
+          <th>Frequência</th>
+          <th>Classificação</th>
+        </tr>
+    `;
+
+    zonas.forEach(z => {
+      z.fcAlvo = ((fcMax - fcRep) * z.pct + fcRep).toFixed(0);
+      html += `
+        <tr>
+          <td>${z.zona}</td>
+          <td>${(z.pct * 100).toFixed(0)}%</td>
+          <td>${z.fcAlvo} bpm</td>
+          <td>${z.nome}</td>
+        </tr>
+      `;
+    });
+
+    html += "</table>";
+    output.innerHTML = html;
+  }
+
+  function atualizarZona(bpm) {
+    if (!zonas.length) return;
+
+    let zonaAtual = zonas.find((z, i) => {
+      const prox = zonas[i + 1];
+      return bpm <= (prox ? prox.fcAlvo : Infinity);
+    }) || zonas[zonas.length - 1];
+
+    const cores = ["#2e7d32","#1565c0","#f9a825","#fb8c00","#e53935","#b71c1c"];
+
+    zonaElement.textContent =
+      `Zona ${zonaAtual.zona} • ${zonaAtual.nome} • ${bpm} bpm`;
+
+    zonaElement.style.background = cores[zonaAtual.zona - 1];
+  }
+</script>
+
+</body>
+</html>
